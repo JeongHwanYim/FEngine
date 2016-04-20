@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="FTD">
+      <UniqueIdentifier>{8bf6cef5-0b59-473d-88b1-99e83e0fb5f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FTD\Library">
+      <UniqueIdentifier>{41e0dae5-992e-41e5-93a9-0ccd9c53a62a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FTD\MemoryAllocator">
+      <UniqueIdentifier>{fec8f7e4-c868-494f-92a5-efc1703acd62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FTD\FDataStructure">
+      <UniqueIdentifier>{740ac36c-4608-427e-94dd-62c8c2ce3a6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FTD\FTesting">
+      <UniqueIdentifier>{d964fce4-1383-46b2-bf13-e27b73f02960}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FTD\FTesting\TestList">
+      <UniqueIdentifier>{4d1f3892-369e-4fa1-bd50-613a5a6cbc71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device">
+      <UniqueIdentifier>{3b75685b-5c43-4e71-ad2b-e7ad9b41ddf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\InputDevice">
+      <UniqueIdentifier>{e41959a8-7791-4e50-b800-55cf84d55643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\RenderDevice">
+      <UniqueIdentifier>{6c035120-d5c0-403c-8bc7-86821037184b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\InputDevice\Interface">
+      <UniqueIdentifier>{4ce25bae-1039-4517-bbc5-a8d43994466e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\RenderDevice\Interface">
+      <UniqueIdentifier>{ab8d8539-d8ed-4997-bb60-bb8422da7324}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\RenderDevice\DXD11">
+      <UniqueIdentifier>{ddce57b8-aad4-4d94-b93f-083eb570f652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\RenderDevice\Windows">
+      <UniqueIdentifier>{83fead3f-8198-4d72-a88e-0298469fed72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\InputDevice\DirectInput">
+      <UniqueIdentifier>{b7e6e506-cb10-44c0-8596-69a64eb889c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\InputDevice\DirectInput\KeyBoard">
+      <UniqueIdentifier>{68dd596a-8172-4286-ae0e-53da1a5a05e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\InputDevice\Enum">
+      <UniqueIdentifier>{88c76d7c-1ddf-4f96-99e7-962372506ac2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\InputDevice\DirectInput\Context">
+      <UniqueIdentifier>{6b9938a5-309c-415a-9c02-5f199301c188}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\InputDevice\DirectInput\Mouse">
+      <UniqueIdentifier>{e6e2ef2b-308c-4b6d-b4f9-52e6d7e1a02f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="FEngineLoop.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TestFArray.cpp">
+      <Filter>FTD\FTesting\TestList</Filter>
+    </ClCompile>
+    <ClCompile Include="TestFString.cpp">
+      <Filter>FTD\FTesting\TestList</Filter>
+    </ClCompile>
+    <ClCompile Include="FRenderD3D11.cpp">
+      <Filter>Device\RenderDevice\DXD11</Filter>
+    </ClCompile>
+    <ClCompile Include="FWindows.cpp">
+      <Filter>Device\RenderDevice\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="FDeviceInputKeyboard.cpp">
+      <Filter>Device\InputDevice\DirectInput\KeyBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="FDirectInputContext.cpp">
+      <Filter>Device\InputDevice\DirectInput\Context</Filter>
+    </ClCompile>
+    <ClCompile Include="FDirectInputMouse.cpp">
+      <Filter>Device\InputDevice\DirectInput\Mouse</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FateEngineDefine.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FLibrary.h">
+      <Filter>FTD\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="FMemAllocator.h">
+      <Filter>FTD\MemoryAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="FMemFunc.h">
+      <Filter>FTD\MemoryAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="FIMemAllocator.h">
+      <Filter>FTD\MemoryAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="FTestHelper.h">
+      <Filter>FTD\FTesting</Filter>
+    </ClInclude>
+    <ClInclude Include="FArray.h">
+      <Filter>FTD\FDataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="FString.h">
+      <Filter>FTD\FDataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="FRenderD3D11.h">
+      <Filter>Device\RenderDevice\DXD11</Filter>
+    </ClInclude>
+    <ClInclude Include="FRenderDevice.h">
+      <Filter>Device\RenderDevice\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="FWindows.h">
+      <Filter>Device\RenderDevice\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="FInputDevice.h">
+      <Filter>Device\InputDevice\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="FKeyboardEnum.h">
+      <Filter>Device\InputDevice\Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="FDirectInputKeyboard.h">
+      <Filter>Device\InputDevice\DirectInput\KeyBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="FInputContext.h">
+      <Filter>Device\InputDevice\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="FDirectInputContext.h">
+      <Filter>Device\InputDevice\DirectInput\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="FDirectInputMouse.h">
+      <Filter>Device\InputDevice\DirectInput\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="FMouseEnum.h">
+      <Filter>Device\InputDevice\Enum</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Resource\Shader\shader.shader">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+</Project>
