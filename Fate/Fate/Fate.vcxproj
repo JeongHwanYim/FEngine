@@ -257,6 +257,7 @@
     <ClCompile Include="FDirectInputContext.cpp" />
     <ClCompile Include="FDirectInputMouse.cpp" />
     <ClCompile Include="FEngineLoop.cpp" />
+    <ClCompile Include="FInputManager.cpp" />
     <ClCompile Include="FRenderD3D11.cpp" />
     <ClCompile Include="FWindows.cpp" />
     <ClCompile Include="TestFArray.cpp" />
@@ -264,22 +265,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FateEngineDefine.h" />
+    <ClInclude Include="FateEngineGlobalVariable.h" />
     <ClInclude Include="FDirectInputContext.h" />
     <ClInclude Include="FDirectInputKeyboard.h" />
     <ClInclude Include="FDirectInputMouse.h" />
+    <ClInclude Include="FEventHandleHelper.h" />
     <ClInclude Include="FInputContext.h" />
     <ClInclude Include="FInputDevice.h" />
-    <ClInclude Include="FKeyboardEnum.h" />
+    <ClInclude Include="FInputDeviceEnum.h" />
+    <ClInclude Include="FInputListener.h" />
+    <ClInclude Include="FInputManager.h" />
     <ClInclude Include="FLibrary.h" />
     <ClInclude Include="FMemAllocator.h" />
     <ClInclude Include="FArray.h" />
     <ClInclude Include="FIMemAllocator.h" />
     <ClInclude Include="FMemFunc.h" />
-    <ClInclude Include="FMouseEnum.h" />
+    <ClInclude Include="FMouseListener.h" />
     <ClInclude Include="FRenderD3D11.h" />
     <ClInclude Include="FRenderDevice.h" />
+    <ClInclude Include="FSphereCameraMouseListener.h" />
     <ClInclude Include="FString.h" />
     <ClInclude Include="FTestHelper.h" />
+    <ClInclude Include="FTimer.h" />
     <ClInclude Include="FWindows.h" />
   </ItemGroup>
   <ItemGroup>

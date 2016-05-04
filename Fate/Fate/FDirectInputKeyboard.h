@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FInputDevice.h"
-#include "FKeyboardEnum.h"
+#include "FInputDeviceEnum.h"
 #include <dinput.h>
 #include <vector>
 
@@ -28,16 +28,34 @@ private:
 		const byte keyPressedMask = 0x80;
 
 		unsigned int nOtherKey = GetOtherKey(nFTLKey);
-		byte nState = fDIKeyboardState[nOtherKey];
+		byte nCurState = fDIKeyboardState[nOtherKey];
+		byte nPrevState = fPrevKeyboardState[nOtherKey];
 
-		return (nState & keyPressedMask) > 0;
+		bool bCurPressed = (nCurState & keyPressedMask) != 0;
+		bool bPrevPressed = (nPrevState & keyPressedMask) != 0;
+
+		return (bCurPressed == true) && (bPrevPressed == false);
+	}
+	__forceinline bool IsKeyReleased(unsigned int nFTLKey)
+	{
+		const byte keyPressedMask = 0x80;
+
+		unsigned int nOtherKey = GetOtherKey(nFTLKey);
+		byte nCurState = fDIKeyboardState[nOtherKey];
+		byte nPrevState = fPrevKeyboardState[nOtherKey];
+
+		bool bCurPressed = (nCurState & keyPressedMask) != 0;
+		bool bPrevPressed = (nPrevState & keyPressedMask) != 0;
+
+		return (bCurPressed == false) && (bPrevPressed == true);
 	}
 private:
 	FDirectInputContext* m_pOwner;
 
 	LPDIRECTINPUTDEVICE8 m_pDIKeyboard; // The keyboard device
 
-	unsigned int m_KeyBindMap[FKeyboardEnum::FKEY_ENUM_END];
+	unsigned int m_KeyBindMap[FInputDeviceEnum::FKEY_ENUM_END];
 	std::vector< unsigned int > m_KeyList;
-	byte fDIKeyboardState[sizeof(byte) * 256];
+	byte fPrevKeyboardState[256];
+	byte fDIKeyboardState[256];
 };

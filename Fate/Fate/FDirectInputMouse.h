@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FInputDevice.h"
-#include "FMouseEnum.h"
+#include "FInputDeviceEnum.h"
 #include <dinput.h>
 #include <vector>
 
@@ -17,31 +17,36 @@ public:
 
 	virtual void BindAll();
 private:
-	typedef void(FDirectInputMouse::*MemberFuncPtr)();
-	__forceinline void Bind(unsigned int nFTLKey, MemberFuncPtr func)
+	__forceinline bool IsKeyPressed(unsigned int index)
 	{
-		m_MouseBindMap[nFTLKey] = func;
-		m_MouseList.push_back(nFTLKey);
+		const byte keyPressedMask = 0x80;
+
+		byte nCurState = fDIMouseState.rgbButtons[index];
+		byte nPrevState = fPrevMouseState.rgbButtons[index];
+
+		bool bCurPressed = (nCurState & keyPressedMask) != 0;
+		bool bPrevPressed = (nPrevState & keyPressedMask) != 0;
+
+		return (bCurPressed == true) && (bPrevPressed == false);
+	}
+	__forceinline bool IsKeyReleased(unsigned int index)
+	{
+		const byte keyPressedMask = 0x80;
+
+		byte nCurState = fDIMouseState.rgbButtons[index];
+		byte nPrevState = fPrevMouseState.rgbButtons[index];
+
+		bool bCurPressed = (nCurState & keyPressedMask) != 0;
+		bool bPrevPressed = (nPrevState & keyPressedMask) != 0;
+
+		return (bCurPressed == false) && (bPrevPressed == true);
 	}
 
-	void XAxisHandle();
-	void YAxisHandle();
-	void ZAxisHandle();
-	
-	void LButtonUpHandle();
-	void LButtonDownHandle();
-
-	void RButtonUpHandle();
-	void RButtonDownHandle();
-
-	void WheelClickHandle();
 private:
 	FDirectInputContext* m_pOwner;
 
 	LPDIRECTINPUTDEVICE8 m_pDIMouse; // The mouse device
 
 	DIMOUSESTATE fDIMouseState;
-
-	MemberFuncPtr m_MouseBindMap[FMouseEnum::FMOUSE_ENUM_END];
-	std::vector<unsigned int> m_MouseList;
+	DIMOUSESTATE fPrevMouseState;
 };

@@ -4,21 +4,8 @@
 #include "FRenderDevice.h"
 #include "FRenderD3D11.h"
 
-#include "FDirectInputContext.h"
+#include "FInputManager.h"
 
-namespace FTL
-{
-	HINSTANCE gMainInstance = 0;
-
-#if WITH_D3D11
-	IRenderDevice* gRenderDevice = new FRenderD3D11();
-#else
-#endif
-	IInputContext* gInputContext = new FDirectInputContext();
-}
-
-namespace FTL
-{
 	void CreateMainWindow()
 	{
 		// the handle for the window, filled by a function
@@ -48,8 +35,8 @@ namespace FTL
 			WS_OVERLAPPEDWINDOW,    // window style
 			300,    // x-position of the window
 			300,    // y-position of the window
-			WINDOW_DEFAULT_ROW_SIZE,    // width of the window
-			WINDOW_DEFAULT_COL_SIZE,    // height of the window
+			FTL::WINDOW_DEFAULT_ROW_SIZE,    // width of the window
+			FTL::WINDOW_DEFAULT_COL_SIZE,    // height of the window
 			NULL,    // we have no parent window, NULL
 			NULL,    // we aren't using menus, NULL
 			gMainInstance,    // application handle
@@ -59,8 +46,12 @@ namespace FTL
 		ShowWindow(hWnd, 1);
 
 		// set up and initialize Direct3D
+
+		extern IRenderDevice* gRenderDevice;
+		extern FInputManager* gInputManager;
+
 		gRenderDevice->Initialize(hWnd);
-		gInputContext->Initialize(hWnd);
+		gInputManager->Initialize(hWnd);
 
 		// enter the main loop:
 
@@ -82,14 +73,16 @@ namespace FTL
 				if (msg.message == WM_QUIT)
 					break;
 
-				gInputContext->Process();
 				gRenderDevice->RenderFrame();
+				gInputManager->Process();
 			}
 			else
 			{
 				// Run game code here
 				// ...
 				// ...
+
+				Sleep(1);
 			}
 		}
 
@@ -129,4 +122,3 @@ namespace FTL
 		}
 		return(DefWindowProc(hWnd, message, wParam, lParam));
 	}
-}

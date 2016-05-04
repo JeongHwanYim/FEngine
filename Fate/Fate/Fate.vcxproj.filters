@@ -67,6 +67,15 @@
     <Filter Include="Device\InputDevice\DirectInput\Mouse">
       <UniqueIdentifier>{e6e2ef2b-308c-4b6d-b4f9-52e6d7e1a02f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Device\InputDevice\Listener">
+      <UniqueIdentifier>{6f157fca-745a-43aa-acd9-e042eeec0378}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\InputDevice\Helper">
+      <UniqueIdentifier>{bc977b8d-4667-4380-a826-0e9aac412695}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\InputDevice\Manager">
+      <UniqueIdentifier>{0cc25810-cfaa-4297-a2f3-1455bb05dba6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FEngineLoop.cpp">
@@ -92,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="FDirectInputMouse.cpp">
       <Filter>Device\InputDevice\DirectInput\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="FInputManager.cpp">
+      <Filter>Device\InputDevice\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -131,9 +143,6 @@
     <ClInclude Include="FInputDevice.h">
       <Filter>Device\InputDevice\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="FKeyboardEnum.h">
-      <Filter>Device\InputDevice\Enum</Filter>
-    </ClInclude>
     <ClInclude Include="FDirectInputKeyboard.h">
       <Filter>Device\InputDevice\DirectInput\KeyBoard</Filter>
     </ClInclude>
@@ -146,8 +155,29 @@
     <ClInclude Include="FDirectInputMouse.h">
       <Filter>Device\InputDevice\DirectInput\Mouse</Filter>
     </ClInclude>
-    <ClInclude Include="FMouseEnum.h">
+    <ClInclude Include="FInputDeviceEnum.h">
       <Filter>Device\InputDevice\Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="FInputListener.h">
+      <Filter>Device\InputDevice\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="FMouseListener.h">
+      <Filter>Device\InputDevice\Listener</Filter>
+    </ClInclude>
+    <ClInclude Include="FEventHandleHelper.h">
+      <Filter>Device\InputDevice\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="FTimer.h">
+      <Filter>FTD\FDataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="FInputManager.h">
+      <Filter>Device\InputDevice\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="FateEngineGlobalVariable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FSphereCameraMouseListener.h">
+      <Filter>Device\InputDevice\Listener</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

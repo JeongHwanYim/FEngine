@@ -26,19 +26,19 @@ namespace FTL
 	};
 }
 
+extern FTL::IMemAllocator* gAllocator;
+
 namespace FTL
 {
 	template<typename AllocType>
 	__forceinline AllocType* Alloc(size_t nSize = 1)
 	{
-		extern IMemAllocator* gAllocator;
 		return (AllocType *)gAllocator->Alloc(nSize * sizeof(AllocType));
 	}
 
 	template<typename AllocType>
 	__forceinline void Free(AllocType* &Pointer)
 	{
-		extern IMemAllocator* gAllocator;
 		gAllocator->Free(Pointer);
 
 		Pointer = nullptr;

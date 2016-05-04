@@ -1,4 +1,5 @@
 #include "FateEngineDefine.h"
+#include "FateEngineGlobalVariable.h"
 
 #include <tchar.h>
 #include <string.h>
@@ -24,11 +25,6 @@ typedef std::string tstring;
 #pragma comment (lib, "dinput8.lib")
 #pragma endregion
 
-namespace FTL
-{
-	IMemAllocator* gAllocator = new StdAllocator();
-}
-
 size_t ParseCommandLine(FArray<TCHAR*>& CmdList, const LPTSTR CommandLine)
 {
 	LPTSTR pNextToken = NULL;
@@ -49,7 +45,7 @@ int APIENTRY _tWinMain(
 	LPTSTR		lpCmdLine,
 	int			nCmdShow)
 {
-	FTL::RegistMainInstance(hInstance);
+	RegistMainInstance(hInstance);
 
 	FArray<TCHAR*> CmdList;
 	size_t nSize = ParseCommandLine(CmdList, GetCommandLine());
@@ -57,7 +53,7 @@ int APIENTRY _tWinMain(
 	// 모든 테스트가 검증되는지 확인.
 	bool RunTestAllPassed = FTestExecutor::RunTest();
 
-	FTL::CreateMainWindow();
+	CreateMainWindow();
 
 	return 0;
 }
