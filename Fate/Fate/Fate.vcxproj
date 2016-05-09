@@ -287,7 +287,9 @@
     <ClInclude Include="FString.h" />
     <ClInclude Include="FTestHelper.h" />
     <ClInclude Include="FTimer.h" />
+    <ClInclude Include="FTriCorn.h" />
     <ClInclude Include="FWindows.h" />
+    <ClInclude Include="FMath.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Resource\Shader\shader.shader" />

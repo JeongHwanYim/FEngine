@@ -76,6 +76,9 @@
     <Filter Include="Device\InputDevice\Manager">
       <UniqueIdentifier>{0cc25810-cfaa-4297-a2f3-1455bb05dba6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CameraRotateTest">
+      <UniqueIdentifier>{4d57066e-b113-4b40-abf6-de31b2f0c0e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FEngineLoop.cpp">
@@ -178,6 +181,12 @@
     </ClInclude>
     <ClInclude Include="FSphereCameraMouseListener.h">
       <Filter>Device\InputDevice\Listener</Filter>
+    </ClInclude>
+    <ClInclude Include="FMath.h">
+      <Filter>CameraRotateTest</Filter>
+    </ClInclude>
+    <ClInclude Include="FTriCorn.h">
+      <Filter>CameraRotateTest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,8 @@
 #include <d3dx10.h>
 #include <d3dx11.h>
 
+#include "FTriCorn.h"
+
 class FRenderD3D11 : public IRenderDevice
 {
 public:
@@ -25,6 +27,9 @@ private:
 	ID3D11VertexShader *m_pVertexShader;               // the pointer to the vertex shader
 	ID3D11PixelShader *m_pPixelShader;                // the pointer to the pixel shader
 	ID3D11Buffer *m_pVertexBuffer;                // the pointer to the vertex buffer
+	ID3D11Buffer *m_pIndexBuffer;				// ÀÎµ¦½º¹öÆÛ ¤»
+
+	FTriCorn TriCorn;
 };
 
 struct VERTEX{ FLOAT X, Y, Z; D3DXCOLOR Color; };

@@ -76,11 +76,13 @@ void FRenderD3D11::RenderFrame()
 	UINT offset = 0;
 	m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
+	m_pDeviceContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
 	// select which primtive type we are using
 	m_pDeviceContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// draw the vertex buffer to the back buffer
-	m_pDeviceContext->Draw(3, 0);
+	m_pDeviceContext->DrawIndexed(FTriCorn::INDEX_COUNT, 0, 0);
 
 	// switch the back buffer and the front buffer
 	m_pSwapchain->Present(0, 0);
@@ -107,31 +109,65 @@ void FRenderD3D11::Finalize()
 void FRenderD3D11::InitGraphics()
 {
 	// create a triangle using the VERTEX struct
-	VERTEX OurVertices[] =
+//	VERTEX OurVertices[] =
+//	{
+//		{ 0.0f, 0.5f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f) },
+//		{ 0.45f, -0.5, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) },
+//		{ -0.45f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) }
+//	};
+
+	VERTEX OurVertices[FTriCorn::VERTEX_COUNT];
+	for (int i = 0; i < FTriCorn::VERTEX_COUNT; ++i)
 	{
-		{ 0.0f, 0.5f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f) },
-		{ 0.45f, -0.5, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ -0.45f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) }
-	};
+		OurVertices[i].X = TriCorn.vertex[i].pos.V[0];
+		OurVertices[i].Y = TriCorn.vertex[i].pos.V[1];
+		OurVertices[i].Z = TriCorn.vertex[i].pos.V[2];
+
+		OurVertices[i].Color.r = TriCorn.vertex[i].color.V[0];
+		OurVertices[i].Color.g = TriCorn.vertex[i].color.V[1];
+		OurVertices[i].Color.b = TriCorn.vertex[i].color.V[2];
+		OurVertices[i].Color.a = TriCorn.vertex[i].color.V[3];
+	}
 
 
 	// create the vertex buffer
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(bd));
+	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+	ZeroMemory(&indexBufferDesc, sizeof(indexBufferDesc));
 
-	bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
-	bd.ByteWidth = sizeof(VERTEX)* 3;             // size is the VERTEX struct * 3
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
-	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
+	TCHAR buff[256];
+	swprintf_s(buff, TEXT("size : %d"), sizeof(OurVertices));
+	OutputDebugString(buff);
 
-	m_pDevice->CreateBuffer(&bd, NULL, &m_pVertexBuffer);       // create the buffer
+	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
+	vertexBufferDesc.ByteWidth = sizeof(VERTEX)* FTriCorn::VERTEX_COUNT;             // size is the VERTEX struct * VERTEX_COUNT
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
+	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
+	// 정적 인덱스 버퍼의 description을 작성합니다.
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth = sizeof(WORD)* FTriCorn::INDEX_COUNT;
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+	indexBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA indexSubsourceData;
+	indexSubsourceData.pSysMem = TriCorn.indices.data();
+	indexSubsourceData.SysMemPitch = 0;
+	indexSubsourceData.SysMemSlicePitch = 0;
+
+	m_pDevice->CreateBuffer(&vertexBufferDesc, NULL, &m_pVertexBuffer);       // create vertex buffer
+	m_pDevice->CreateBuffer(&indexBufferDesc, &indexSubsourceData, &m_pIndexBuffer);       // create index buffer
 
 	// copy the vertices into the buffer
 	D3D11_MAPPED_SUBRESOURCE ms;
 	m_pDeviceContext->Map(m_pVertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);    // map the buffer
 	memcpy(ms.pData, OurVertices, sizeof(OurVertices));                 // copy the data
 	m_pDeviceContext->Unmap(m_pVertexBuffer, NULL);                                      // unmap the buffer
+
+	m_pDeviceContext->Map(m_pIndexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, NULL);    // map the buffer
+	m_pDeviceContext->Unmap(m_pIndexBuffer, NULL);
 }
 
 
