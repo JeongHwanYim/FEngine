@@ -98,6 +98,7 @@ void FRenderD3D11::Finalize()
 	m_pVertexShader->Release();
 	m_pPixelShader->Release();
 	m_pVertexBuffer->Release();
+	m_pIndexBuffer->Release();
 	m_pSwapchain->Release();
 	m_pBackbuffer->Release();
 	m_pDevice->Release();
@@ -116,58 +117,33 @@ void FRenderD3D11::InitGraphics()
 //		{ -0.45f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) }
 //	};
 
-	VERTEX OurVertices[FTriCorn::VERTEX_COUNT];
-	for (int i = 0; i < FTriCorn::VERTEX_COUNT; ++i)
-	{
-		OurVertices[i].X = TriCorn.vertex[i].pos.V[0];
-		OurVertices[i].Y = TriCorn.vertex[i].pos.V[1];
-		OurVertices[i].Z = TriCorn.vertex[i].pos.V[2];
-
-		OurVertices[i].Color.r = TriCorn.vertex[i].color.V[0];
-		OurVertices[i].Color.g = TriCorn.vertex[i].color.V[1];
-		OurVertices[i].Color.b = TriCorn.vertex[i].color.V[2];
-		OurVertices[i].Color.a = TriCorn.vertex[i].color.V[3];
-	}
-
-
 	// create the vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 	ZeroMemory(&indexBufferDesc, sizeof(indexBufferDesc));
 
-	TCHAR buff[256];
-	swprintf_s(buff, TEXT("size : %d"), sizeof(OurVertices));
-	OutputDebugString(buff);
 
 	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
 	vertexBufferDesc.ByteWidth = sizeof(VERTEX)* FTriCorn::VERTEX_COUNT;             // size is the VERTEX struct * VERTEX_COUNT
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
 	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
+	D3D11_SUBRESOURCE_DATA vertexSubresourceData;
+	vertexSubresourceData.pSysMem = TriCorn.vertex;
+	m_pDevice->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, &m_pVertexBuffer);       // create vertex buffer
+
 	// 정적 인덱스 버퍼의 description을 작성합니다.
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(WORD)* FTriCorn::INDEX_COUNT;
+	indexBufferDesc.ByteWidth = sizeof(DWORD)* FTriCorn::INDEX_COUNT;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
 	indexBufferDesc.StructureByteStride = 0;
 
-	D3D11_SUBRESOURCE_DATA indexSubsourceData;
-	indexSubsourceData.pSysMem = TriCorn.indices.data();
-	indexSubsourceData.SysMemPitch = 0;
-	indexSubsourceData.SysMemSlicePitch = 0;
+	D3D11_SUBRESOURCE_DATA indexSubresourceData;
+	indexSubresourceData.pSysMem = TriCorn.indices.data();
 
-	m_pDevice->CreateBuffer(&vertexBufferDesc, NULL, &m_pVertexBuffer);       // create vertex buffer
-	m_pDevice->CreateBuffer(&indexBufferDesc, &indexSubsourceData, &m_pIndexBuffer);       // create index buffer
-
-	// copy the vertices into the buffer
-	D3D11_MAPPED_SUBRESOURCE ms;
-	m_pDeviceContext->Map(m_pVertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);    // map the buffer
-	memcpy(ms.pData, OurVertices, sizeof(OurVertices));                 // copy the data
-	m_pDeviceContext->Unmap(m_pVertexBuffer, NULL);                                      // unmap the buffer
-
-	m_pDeviceContext->Map(m_pIndexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, NULL);    // map the buffer
-	m_pDeviceContext->Unmap(m_pIndexBuffer, NULL);
+	m_pDevice->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &m_pIndexBuffer);       // create index buffer
 }
 
 

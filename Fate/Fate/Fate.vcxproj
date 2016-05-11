@@ -266,6 +266,7 @@
   <ItemGroup>
     <ClInclude Include="FateEngineDefine.h" />
     <ClInclude Include="FateEngineGlobalVariable.h" />
+    <ClInclude Include="FCamera.h" />
     <ClInclude Include="FDirectInputContext.h" />
     <ClInclude Include="FDirectInputKeyboard.h" />
     <ClInclude Include="FDirectInputMouse.h" />
