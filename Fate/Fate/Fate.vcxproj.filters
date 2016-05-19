@@ -191,6 +191,9 @@
     <ClInclude Include="FCamera.h">
       <Filter>CameraRotateTest</Filter>
     </ClInclude>
+    <ClInclude Include="FObject.h">
+      <Filter>CameraRotateTest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Resource\Shader\shader.shader">

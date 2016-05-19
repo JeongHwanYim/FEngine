@@ -129,7 +129,7 @@ void FRenderD3D11::InitGraphics()
 	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
 	D3D11_SUBRESOURCE_DATA vertexSubresourceData;
-	vertexSubresourceData.pSysMem = TriCorn.vertex;
+	vertexSubresourceData.pSysMem = TriCorn.vertex.data();
 	m_pDevice->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, &m_pVertexBuffer);       // create vertex buffer
 
 	// 정적 인덱스 버퍼의 description을 작성합니다.

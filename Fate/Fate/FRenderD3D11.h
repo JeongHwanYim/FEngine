@@ -32,4 +32,4 @@ private:
 	FTriCorn TriCorn;
 };
 
-struct VERTEX{ FLOAT X, Y, Z; D3DXCOLOR Color; };
+struct VERTEX{ FLOAT X, Y, Z; D3DXCOLOR Color; FMatrix LocWorldProjMatrix; };

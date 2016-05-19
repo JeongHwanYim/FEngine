@@ -282,6 +282,7 @@
     <ClInclude Include="FIMemAllocator.h" />
     <ClInclude Include="FMemFunc.h" />
     <ClInclude Include="FMouseListener.h" />
+    <ClInclude Include="FObject.h" />
     <ClInclude Include="FRenderD3D11.h" />
     <ClInclude Include="FRenderDevice.h" />
     <ClInclude Include="FSphereCameraMouseListener.h" />

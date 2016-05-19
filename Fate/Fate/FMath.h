@@ -46,6 +46,11 @@ struct FVector
 
 		return *this;
 	}
+
+	FVector operator -()
+	{
+		return FVector(3, -this->V[0], -this->V[1], -this->V[2]);
+	}
 };
 
 
@@ -103,6 +108,57 @@ struct FVector4
 	}
 };
 
+struct FRotator
+{
+	static const int NUM_ELEMENT = 3;
+
+	float V[NUM_ELEMENT];
+
+	FRotator()
+	{
+		for (int i = 0; i < NUM_ELEMENT; ++i)
+		{
+			V[i] = 0;
+		}
+	}
+	template<typename F>
+	FRotator(int nDepth, F&& f)
+	{
+		V[NUM_ELEMENT - nDepth] = f;
+	}
+
+	template<typename F, typename... Args>
+	FRotator(int nDepth, F&& f, Args&&... args)
+		: FRotator(nDepth - 1, std::forward<Args>(args)...)
+	{
+		V[NUM_ELEMENT - nDepth] = f;
+	}
+
+	FRotator(const FRotator& other)
+	{
+		for (int i = 0; i < NUM_ELEMENT; ++i)
+		{
+			this->V[i] = other.V[i];
+		}
+	}
+
+	FRotator& operator =(const FRotator& other)
+	{
+		for (int i = 0; i < NUM_ELEMENT; ++i)
+		{
+			this->V[i] = other.V[i];
+		}
+
+		return *this;
+	}
+
+	FRotator operator -()
+	{
+		return FRotator(3, -this->V[0], -this->V[1], -this->V[2]);
+	}
+};
+
+
 struct FMatrix
 {
 	static const int NUM_ELEMENT = 4;
@@ -131,6 +187,11 @@ struct FMatrix
 		}
 	}
 	
+	FMatrix& operator *=(const FMatrix& other)
+	{
+		return *this * other;
+	}
+
 	FMatrix& operator *(const FMatrix& other)
 	{
 		FMatrix RHS(*this);
@@ -156,6 +217,8 @@ struct FMatrix
 		{
 			this->M[NUM_ELEMENT][i] *= scale.V[i];
 		}
+
+		return *this;
 	}
 
 	FMatrix& SetTranslation(const FVector& translation)
@@ -164,9 +227,11 @@ struct FMatrix
 		{
 			this->M[NUM_ELEMENT][i] += translation.V[i];
 		}
+
+		return *this;
 	}
 
-	FMatrix& SetRotation(const FVector& rotation)
+	FMatrix& SetRotation(const FRotator& rotation)
 	{
 		FMatrix RotMatrix;
 
