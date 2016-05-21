@@ -71,6 +71,7 @@ void FRenderD3D11::RenderFrame()
 	m_pDeviceContext->ClearRenderTargetView(m_pBackbuffer, colorRGBA);
 
 
+
 	// select which vertex buffer to display
 	UINT stride = sizeof(VERTEX);
 	UINT offset = 0;
@@ -109,41 +110,9 @@ void FRenderD3D11::Finalize()
 // this is the function that creates the shape to render
 void FRenderD3D11::InitGraphics()
 {
-	// create a triangle using the VERTEX struct
-//	VERTEX OurVertices[] =
-//	{
-//		{ 0.0f, 0.5f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f) },
-//		{ 0.45f, -0.5, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) },
-//		{ -0.45f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) }
-//	};
-
-	// create the vertex buffer
-	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
-	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
-	ZeroMemory(&indexBufferDesc, sizeof(indexBufferDesc));
-
-
-	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
-	vertexBufferDesc.ByteWidth = sizeof(VERTEX)* FTriCorn::VERTEX_COUNT;             // size is the VERTEX struct * VERTEX_COUNT
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
-	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
-
-	D3D11_SUBRESOURCE_DATA vertexSubresourceData;
-	vertexSubresourceData.pSysMem = TriCorn.vertex.data();
-	m_pDevice->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, &m_pVertexBuffer);       // create vertex buffer
-
-	// 정적 인덱스 버퍼의 description을 작성합니다.
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(DWORD)* FTriCorn::INDEX_COUNT;
-	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDesc.CPUAccessFlags = 0;
-	indexBufferDesc.MiscFlags = 0;
-	indexBufferDesc.StructureByteStride = 0;
-
-	D3D11_SUBRESOURCE_DATA indexSubresourceData;
-	indexSubresourceData.pSysMem = TriCorn.indices.data();
-
-	m_pDevice->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &m_pIndexBuffer);       // create index buffer
+	SetConstantBuffer();
+	SetVertexBuffer();
+	SetIndexBuffer();
 }
 
 
@@ -168,8 +137,64 @@ void FRenderD3D11::InitPipeline()
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	//	{ "MATRIX", 0, DXGI_FORMAT_, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
 	m_pDevice->CreateInputLayout(ied, 2, VertexShader->GetBufferPointer(), VertexShader->GetBufferSize(), &m_pLayout);
 	m_pDeviceContext->IASetInputLayout(m_pLayout);
+}
+
+void FRenderD3D11::SetVertexBuffer(void)
+{
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
+	vertexBufferDesc.ByteWidth = sizeof(VERTEX)* triCorn.vertex.size();             // size is the VERTEX struct * VERTEX_COUNT
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
+	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
+
+	D3D11_SUBRESOURCE_DATA vertexSubresourceData;
+	vertexSubresourceData.pSysMem = triCorn.vertex.data();
+	m_pDevice->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, &m_pVertexBuffer);       // create vertex buffer
+}
+
+void FRenderD3D11::SetIndexBuffer(void)
+{
+	D3D11_BUFFER_DESC indexBufferDesc;
+	ZeroMemory(&indexBufferDesc, sizeof(indexBufferDesc));
+
+	// 정적 인덱스 버퍼의 description을 작성합니다.
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth = sizeof(DWORD)* triCorn.indices.size();
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+	indexBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA indexSubresourceData;
+	indexSubresourceData.pSysMem = triCorn.indices.data();
+
+	m_pDevice->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &m_pIndexBuffer);       // create index buffer
+}
+
+void FRenderD3D11::SetConstantBuffer(void)
+{
+	D3D11_BUFFER_DESC cBufferDesc;
+	ZeroMemory(&cBufferDesc, sizeof(cBufferDesc));
+
+	// 정적 인덱스 버퍼의 description을 작성합니다.
+	cBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	cBufferDesc.ByteWidth = sizeof(FMatrix);
+	cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cBufferDesc.CPUAccessFlags = 0;
+	cBufferDesc.MiscFlags = 0;
+	cBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA constantSubresourceData;
+
+	FMatrix projectionMatrix = camera.GetProjectionMatrix();
+	constantSubresourceData.pSysMem = &projectionMatrix;
+
+	m_pDevice->CreateBuffer(&cBufferDesc, &constantSubresourceData, &m_pCBuffer);       // create index buffer
 }

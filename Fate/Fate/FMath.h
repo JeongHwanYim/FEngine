@@ -5,7 +5,7 @@
 
 struct FVector
 {
-	static const int NUM_ELEMENT = 3;
+	enum { NUM_ELEMENT = 3 };
 
 	float V[NUM_ELEMENT];
 
@@ -56,7 +56,7 @@ struct FVector
 
 struct FVector4
 {
-	static const int NUM_ELEMENT = 4;
+	enum { NUM_ELEMENT = 4 };
 
 	float V[NUM_ELEMENT];
 
@@ -110,7 +110,7 @@ struct FVector4
 
 struct FRotator
 {
-	static const int NUM_ELEMENT = 3;
+	enum { NUM_ELEMENT = 3 };
 
 	float V[NUM_ELEMENT];
 
@@ -161,7 +161,7 @@ struct FRotator
 
 struct FMatrix
 {
-	static const int NUM_ELEMENT = 4;
+	enum { NUM_ELEMENT = 4 };
 
 	float M[NUM_ELEMENT][NUM_ELEMENT];
 

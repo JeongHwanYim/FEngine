@@ -12,10 +12,10 @@ struct FVertex
 
 struct FTriCorn : public FObject
 {
-	static const int VERTEX_COUNT = 4;
+	enum { VERTEX_COUNT = 4 };
 	std::vector<FVertex> vertex;
 
-	static const int INDEX_COUNT = 12;
+	enum { INDEX_COUNT = 12 };
 	std::vector<DWORD> indices;
 
 	FTriCorn() : FObject(nullptr)
