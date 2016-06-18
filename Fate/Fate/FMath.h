@@ -106,6 +106,17 @@ struct FVector4
 
 		return *this;
 	}
+
+	FVector4& transVector4(const FVector& origin)
+	{
+		for (int i = 0; i < origin.NUM_ELEMENT; ++i)
+		{
+			this->V[i] = origin.V[i];
+		}
+		this->V[origin.NUM_ELEMENT] = 1;
+
+		return *this;
+	}
 };
 
 struct FRotator
@@ -215,7 +226,7 @@ struct FMatrix
 	{
 		for (int i = 0; i < scale.NUM_ELEMENT; ++i)
 		{
-			this->M[NUM_ELEMENT][i] *= scale.V[i];
+			this->M[i][i] *= scale.V[i];
 		}
 
 		return *this;
@@ -225,7 +236,7 @@ struct FMatrix
 	{
 		for (int i = 0; i < translation.NUM_ELEMENT; ++i)
 		{
-			this->M[NUM_ELEMENT][i] += translation.V[i];
+			this->M[NUM_ELEMENT-1][i] += translation.V[i];
 		}
 
 		return *this;

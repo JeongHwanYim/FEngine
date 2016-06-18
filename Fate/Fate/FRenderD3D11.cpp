@@ -61,6 +61,8 @@ bool FRenderD3D11::Initialize(HWND hWindow)
 	InitPipeline();
 	InitGraphics();
 
+	TestGPUCalcValue();
+
 	return true;
 }
 
@@ -70,7 +72,9 @@ void FRenderD3D11::RenderFrame()
 	// clear the back buffer to a deep blue
 	m_pDeviceContext->ClearRenderTargetView(m_pBackbuffer, colorRGBA);
 
-
+	UpdateVertexBuffer();
+	UpdateIndexBuffer();
+	UpdateConstantBuffer();
 
 	// select which vertex buffer to display
 	UINT stride = sizeof(VERTEX);
@@ -78,6 +82,8 @@ void FRenderD3D11::RenderFrame()
 	m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
 	m_pDeviceContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pCBuffer);
 
 	// select which primtive type we are using
 	m_pDeviceContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -95,15 +101,16 @@ void FRenderD3D11::Finalize()
 	m_pSwapchain->SetFullscreenState(FALSE, NULL);    // switch to windowed mode
 	
 	// close and release all existing COM objects
-	m_pLayout->Release();
-	m_pVertexShader->Release();
-	m_pPixelShader->Release();
-	m_pVertexBuffer->Release();
-	m_pIndexBuffer->Release();
-	m_pSwapchain->Release();
-	m_pBackbuffer->Release();
-	m_pDevice->Release();
-	m_pDeviceContext->Release();
+	if (m_pLayout ) m_pLayout->Release();
+	if (m_pVertexShader) m_pVertexShader->Release();
+	if (m_pPixelShader) m_pPixelShader->Release();
+	if (m_pVertexBuffer) m_pVertexBuffer->Release();
+	if (m_pIndexBuffer) m_pIndexBuffer->Release();
+	if (m_pCBuffer) m_pCBuffer->Release();
+	if (m_pSwapchain) m_pSwapchain->Release();
+	if (m_pBackbuffer) m_pBackbuffer->Release();
+	if (m_pDevice) m_pDevice->Release();
+	if (m_pDeviceContext) m_pDeviceContext->Release();
 }
 
 
@@ -140,6 +147,7 @@ void FRenderD3D11::InitPipeline()
 	//	{ "MATRIX", 0, DXGI_FORMAT_, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
+//	m_pDevice->CreateInputLayout(ied, _countof(ied), VertexShader->GetBufferPointer(), VertexShader->GetBufferSize(), &m_pLayout);
 	m_pDevice->CreateInputLayout(ied, 2, VertexShader->GetBufferPointer(), VertexShader->GetBufferSize(), &m_pLayout);
 	m_pDeviceContext->IASetInputLayout(m_pLayout);
 }
@@ -184,12 +192,14 @@ void FRenderD3D11::SetConstantBuffer(void)
 	ZeroMemory(&cBufferDesc, sizeof(cBufferDesc));
 
 	// 정적 인덱스 버퍼의 description을 작성합니다.
-	cBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	cBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	cBufferDesc.ByteWidth = sizeof(FMatrix);
 	cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	cBufferDesc.CPUAccessFlags = 0;
 	cBufferDesc.MiscFlags = 0;
 	cBufferDesc.StructureByteStride = 0;
+
+//	m_pDevice->CreateBuffer(&cBufferDesc, NULL, &m_pCBuffer);       // create index buffer
 
 	D3D11_SUBRESOURCE_DATA constantSubresourceData;
 
@@ -197,4 +207,56 @@ void FRenderD3D11::SetConstantBuffer(void)
 	constantSubresourceData.pSysMem = &projectionMatrix;
 
 	m_pDevice->CreateBuffer(&cBufferDesc, &constantSubresourceData, &m_pCBuffer);       // create index buffer
+}
+
+void FRenderD3D11::UpdateVertexBuffer(void)
+{
+
+}
+
+void FRenderD3D11::UpdateIndexBuffer(void)
+{
+
+}
+
+void FRenderD3D11::UpdateConstantBuffer(void)
+{
+	m_CameraProjectionMatrix = camera.GetProjectionMatrix();
+	m_pDeviceContext->UpdateSubresource(m_pCBuffer, 0, NULL, &m_CameraProjectionMatrix, 0, 0);
+}
+
+void FRenderD3D11::TestGPUCalcValue(void)
+{
+	FMatrix mat = camera.GetProjectionMatrix();
+
+	for (auto index : triCorn.indices)
+	{
+		FVertex ver = triCorn.vertex[index];
+		FVector4 vec;
+		vec.transVector4(ver.pos);
+		
+		FVector4 res;
+		for (int i = 0; i < mat.NUM_ELEMENT; ++i)
+		{
+			for (int j = 0; j < vec.NUM_ELEMENT; ++j)
+			{
+				res.V[i] += vec.V[j] * mat.M[j][i];
+			}
+		}
+
+		float fDistance = res.V[2];
+
+		res.V[0] /= fDistance;
+
+		res.V[1] *= camera.m_fScreenRadio;
+		res.V[1] /= res.V[2];
+//		res.V[2] /= camera.m_fFar;
+
+		float fFOVRate = tanf(camera.m_fFOV);
+
+		TCHAR str[256];
+
+		swprintf_s(str, TEXT("indices[%d] = (%f, %f, %f, %f)\n"), index, res.V[0], res.V[1], res.V[2], res.V[3]);
+		OutputDebugString(str);
+	}
 }

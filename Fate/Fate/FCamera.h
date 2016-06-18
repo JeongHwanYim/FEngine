@@ -14,25 +14,40 @@ public:
 		, m_vUp(4, 1.0f, 0.0f, 0.0f, 0.0f)
 	{
 		FObject::m_scale = FVector(3, 1.0f, 1.0f, 1.0f);
-		FObject::m_location = FVector(3, 0.0f, 0.0f, 0.0f);
+		FObject::m_location = FVector(3, 0.f, 0.f, 0.f);
 		FObject::m_direction = FRotator(3, 0.0f, 0.0f, 0.0f);
+	}
+
+	FMatrix GetInverseRotationMatrix()
+	{
+		FMatrix mat;
+
+		FRotator direction = -GetDirection();
+		mat.SetRotation(direction);
+
+		return mat;
+	}
+
+	FMatrix GetInverseTranslationMatrix()
+	{
+		FMatrix mat;
+
+		FVector location = -GetLocation();
+		mat.SetTranslation(location);
+
+		return mat;
 	}
 
 	FMatrix GetProjectionMatrix()
 	{
 		FMatrix mat;
 
-//		FVector scale = -GetScale();
-		FRotator direction = -GetDirection();
-		FVector location = -GetLocation();
-
-//		mat.SetScale(scale);
-		mat.SetRotation(direction);
-		mat.SetTranslation(location);
-
+		mat *= GetInverseTranslationMatrix();
+		mat *= GetInverseRotationMatrix();
+		
 		return mat;
 	}
-private:
+
 	float m_fNear;
 	float m_fFar;
 	float m_fFOV;
@@ -40,4 +55,5 @@ private:
 
 	FVector4 m_vLook;
 	FVector4 m_vUp;
+private:
 };

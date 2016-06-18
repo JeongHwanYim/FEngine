@@ -20,8 +20,13 @@ private:
 
 	void SetVertexBuffer(void);
 	void SetIndexBuffer(void);
-
 	void SetConstantBuffer(void);
+
+	void UpdateVertexBuffer(void);
+	void UpdateIndexBuffer(void);
+	void UpdateConstantBuffer(void);
+
+	void TestGPUCalcValue(void);
 private:
 	IDXGISwapChain *m_pSwapchain;             // the pointer to the swap chain interface
 	ID3D11Device *m_pDevice;                     // the pointer to our Direct3D device interface
@@ -38,6 +43,8 @@ private:
 
 	FTriCorn triCorn;
 	FCamera camera;
+
+	FMatrix m_CameraProjectionMatrix;
 };
 
 struct VERTEX{ FLOAT X, Y, Z; D3DXCOLOR Color;/* FMatrix LocWorldProjMatrix; */};
