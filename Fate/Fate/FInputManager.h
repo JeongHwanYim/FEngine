@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <algorithm>
 
 #include "FInputContext.h"
 #include "FInputListener.h"
@@ -19,6 +20,13 @@ public:
 	void Finalize();
 
 	void AddListener(IInputListener* pListener) { m_ListenerList.push_back(pListener); }
+	void RemoveListener(IInputListener* pListener)
+	{
+		m_ListenerList.erase(
+			std::remove(m_ListenerList.begin(), m_ListenerList.end(), pListener)
+			, m_ListenerList.end()
+		);
+	}
 
 	void Process();
 

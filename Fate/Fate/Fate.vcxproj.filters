@@ -108,6 +108,9 @@
     <ClCompile Include="FInputManager.cpp">
       <Filter>Device\InputDevice\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="FCamera.cpp">
+      <Filter>CameraRotateTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FateEngineDefine.h">

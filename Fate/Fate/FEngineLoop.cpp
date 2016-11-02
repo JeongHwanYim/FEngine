@@ -25,6 +25,16 @@ typedef std::string tstring;
 #pragma comment (lib, "dinput8.lib")
 #pragma endregion
 
+FInputManager* gInputManager = nullptr;
+HINSTANCE gMainInstance = 0;
+
+#if WITH_D3D11
+IRenderDevice* gRenderDevice = nullptr;
+#else
+#endif
+
+FTL::IMemAllocator* gAllocator = new FTL::StdAllocator();
+
 size_t ParseCommandLine(FArray<TCHAR*>& CmdList, const LPTSTR CommandLine)
 {
 	LPTSTR pNextToken = NULL;

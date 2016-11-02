@@ -164,6 +164,7 @@ void FRenderD3D11::SetVertexBuffer(void)
 
 	D3D11_SUBRESOURCE_DATA vertexSubresourceData;
 	vertexSubresourceData.pSysMem = triCorn.vertex.data();
+
 	m_pDevice->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, &m_pVertexBuffer);       // create vertex buffer
 }
 
@@ -193,25 +194,36 @@ void FRenderD3D11::SetConstantBuffer(void)
 
 	// 정적 인덱스 버퍼의 description을 작성합니다.
 	cBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	cBufferDesc.ByteWidth = sizeof(FMatrix);
+	cBufferDesc.ByteWidth = sizeof(VS_CONSTANT_BUFFER);
 	cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	cBufferDesc.CPUAccessFlags = 0;
 	cBufferDesc.MiscFlags = 0;
 	cBufferDesc.StructureByteStride = 0;
 
-//	m_pDevice->CreateBuffer(&cBufferDesc, NULL, &m_pCBuffer);       // create index buffer
-
-	D3D11_SUBRESOURCE_DATA constantSubresourceData;
-
-	FMatrix projectionMatrix = camera.GetProjectionMatrix();
-	constantSubresourceData.pSysMem = &projectionMatrix;
-
-	m_pDevice->CreateBuffer(&cBufferDesc, &constantSubresourceData, &m_pCBuffer);       // create index buffer
+	HRESULT hr;
+	hr = m_pDevice->CreateBuffer(&cBufferDesc, NULL, &m_pCBuffer);       // create index buffer
+	if (FAILED(hr))
+	{
+		DebugBreak();
+	}
 }
 
 void FRenderD3D11::UpdateVertexBuffer(void)
 {
+	/*
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 
+	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
+	vertexBufferDesc.ByteWidth = sizeof(VERTEX)* triCorn.vertex.size();             // size is the VERTEX struct * VERTEX_COUNT
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
+	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
+
+	D3D11_SUBRESOURCE_DATA vertexSubresourceData;
+	vertexSubresourceData.pSysMem = triCorn.vertex.data();
+
+	m_pDevice->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, &m_pVertexBuffer);       // create vertex buffer
+	*/
 }
 
 void FRenderD3D11::UpdateIndexBuffer(void)
@@ -221,8 +233,11 @@ void FRenderD3D11::UpdateIndexBuffer(void)
 
 void FRenderD3D11::UpdateConstantBuffer(void)
 {
-	m_CameraProjectionMatrix = camera.GetProjectionMatrix();
-	m_pDeviceContext->UpdateSubresource(m_pCBuffer, 0, NULL, &m_CameraProjectionMatrix, 0, 0);
+	m_ConstantBuffer.WorldViewProjection = camera.GetProjectionMatrix();
+	m_ConstantBuffer.Fov = camera.m_fFOV;
+	m_ConstantBuffer.Far = camera.m_fFar;
+
+	m_pDeviceContext->UpdateSubresource(m_pCBuffer, 0, NULL, &m_ConstantBuffer, 0, 0);       // create index buffer
 }
 
 void FRenderD3D11::TestGPUCalcValue(void)
@@ -246,13 +261,17 @@ void FRenderD3D11::TestGPUCalcValue(void)
 
 		float fDistance = res.V[2];
 
+		float fFOVRate = tanf(camera.m_fFOV / 2 * acos(-1) / 180);
+
 		res.V[0] /= fDistance;
+		res.V[0] *= fFOVRate;
+		res.V[0] = res.V[0] * 2 - 1.0f;
 
-		res.V[1] *= camera.m_fScreenRadio;
-		res.V[1] /= res.V[2];
-//		res.V[2] /= camera.m_fFar;
+		res.V[1] /= fDistance;
+		res.V[1] *= fFOVRate;
+		res.V[1] = res.V[1] * 2 - 1.0f;
 
-		float fFOVRate = tanf(camera.m_fFOV);
+		res.V[2] = fDistance / camera.m_fFar;
 
 		TCHAR str[256];
 

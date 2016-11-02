@@ -50,6 +50,9 @@
 		extern IRenderDevice* gRenderDevice;
 		extern FInputManager* gInputManager;
 
+		gInputManager = new FInputManager();
+		gRenderDevice = new FRenderD3D11();
+
 		gRenderDevice->Initialize(hWnd);
 		gInputManager->Initialize(hWnd);
 

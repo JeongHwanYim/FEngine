@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FMouseListener.h"
+#include "Windows.h"
 #include <cmath>
 #include <xnamath.h>
 

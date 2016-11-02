@@ -8,6 +8,8 @@
 #include "FTriCorn.h"
 #include "FCamera.h"
 
+struct VS_CONSTANT_BUFFER;
+
 class FRenderD3D11 : public IRenderDevice
 {
 public:
@@ -20,6 +22,7 @@ private:
 
 	void SetVertexBuffer(void);
 	void SetIndexBuffer(void);
+
 	void SetConstantBuffer(void);
 
 	void UpdateVertexBuffer(void);
@@ -44,7 +47,7 @@ private:
 	FTriCorn triCorn;
 	FCamera camera;
 
-	FMatrix m_CameraProjectionMatrix;
+	VS_CONSTANT_BUFFER m_ConstantBuffer;
 };
 
 struct VERTEX{ FLOAT X, Y, Z; D3DXCOLOR Color;/* FMatrix LocWorldProjMatrix; */};

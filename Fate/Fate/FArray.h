@@ -116,6 +116,16 @@ public:
 			Resize();
 	}
 
+	void assign(const FArray<DataType>& other)
+	{
+		m_nCurSize = other.m_nCurSize;
+		m_nMaxSize = other.m_nMaxSize;
+		m_nSizeIndex = other.m_nSizeIndex;
+
+		m_pPivot = FTL::Alloc<DataType>(m_nMaxSize);
+		FTL::memcpy<DataType>(m_pPivot, other.m_pPivot, m_nCurSize);
+	}
+
 	size_t Size() { return m_nCurSize; }
 
 

@@ -38,6 +38,22 @@ public:
 	bool operator== (const FString& other) const { return FTL::stricmp(cbegin(), other.cbegin()) == 0; }
 	bool operator!= (const TCHAR *str) const { return !(operator==(str)); }
 	bool operator!= (const FString& other) const { return !(operator==(other)); }
+
+	FString& operator= (const FString& other)
+	{
+		assign(other);
+
+		return *this;
+	}
+
+	FString& operator= (FString&& other)
+	{
+		assign(other);
+		other.Finalize();
+		
+		return *this;
+	}
+
 	FString& operator+= (const FString& other)
 	{
 		m_nCurSize--;

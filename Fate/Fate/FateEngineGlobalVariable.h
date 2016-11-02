@@ -5,13 +5,13 @@
 #include "FDirectInputContext.h"
 #include "FInputManager.h"
 
-FTL::IMemAllocator* gAllocator = new FTL::StdAllocator();
-HINSTANCE gMainInstance = 0;
+extern FTL::IMemAllocator* gAllocator;
+extern HINSTANCE gMainInstance;
 
 #if WITH_D3D11
-IRenderDevice* gRenderDevice = new FRenderD3D11();
+extern IRenderDevice* gRenderDevice;
 #else
 #endif
 
 
-FInputManager* gInputManager = new FInputManager();
+extern FInputManager* gInputManager;

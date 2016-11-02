@@ -26,7 +26,7 @@ public:
 	virtual void WheelClickHandle(long Argument) {}
 };
 
-void FMouseListener::Preprocess(unsigned int eType, long Argument)
+inline void FMouseListener::Preprocess(unsigned int eType, long Argument)
 {
 	if (eType > FInputDeviceEnum::FMOUSE_ENUM_BEGIN && eType < FInputDeviceEnum::FMOUSE_ENUM_END)
 	{
@@ -34,7 +34,7 @@ void FMouseListener::Preprocess(unsigned int eType, long Argument)
 	}
 }
 
-void FMouseListener::Postprocess()
+inline void FMouseListener::Postprocess()
 {
 	for (auto& pair : queue)
 	{
