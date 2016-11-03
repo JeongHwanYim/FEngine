@@ -65,30 +65,6 @@ public:
 		*this = FString(str);
 		return *this;
 	}
-	FString& operator= (const FString& other)
-	{
-		m_nCurSize = other.m_nCurSize;
-		m_nMaxSize = other.m_nMaxSize;
-		m_nSizeIndex = other.m_nSizeIndex;
-
-		Resize();
-
-		FTL::memcpy(begin(), other.cbegin(), m_nCurSize);
-		
-		return *this;
-	}
-	FString& operator= (FString&& other)
-	{
-		//TODO : Refactoring
-		m_nCurSize = other.m_nCurSize;
-		m_nMaxSize = other.m_nMaxSize;
-		m_nSizeIndex = other.m_nSizeIndex;
-
-		m_pPivot = other.m_pPivot;
-
-		other.Finalize();
-		return *this;
-	}
 	FString& operator+= (const TCHAR *str)
 	{
 		*this += FString(str);

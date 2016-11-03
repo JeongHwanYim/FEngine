@@ -4,6 +4,7 @@
 
 FCamera::FCamera() : FObject(nullptr)
 , m_fNear(150.0f)
+, m_fFar(450.0f)
 , m_fFOV(90.0f)
 , m_fScreenRadio(4.0f / 3.0f)
 , m_vLook(4, 0.0f, 0.0f, 1.0f, 0.0f)
