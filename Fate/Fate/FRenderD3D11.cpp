@@ -35,7 +35,6 @@ bool FRenderD3D11::Initialize(HWND hWindow)
 		NULL,
 		&m_pDeviceContext);
 
-
 	// get the address of the back buffer
 	ID3D11Texture2D *pBackBuffer;
 	m_pSwapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
@@ -246,16 +245,17 @@ void FRenderD3D11::UpdateIndexBuffer(void)
 
 void FRenderD3D11::UpdateConstantBuffer(void)
 {
-	m_ConstantBuffer.WorldViewProjection = camera.GetProjectionMatrix();
+	m_ConstantBuffer.WorldViewProjection = camera.GetViewProjectionMatrix();
 	m_ConstantBuffer.Fov = camera.m_fFOV;
 	m_ConstantBuffer.Far = camera.m_fFar;
+	m_ConstantBuffer.ScreenRatio = camera.m_fScreenRadio;
 
-	m_pDeviceContext->UpdateSubresource(m_pCBuffer, 0, NULL, &m_ConstantBuffer, 0, 0);       // create index buffer
+	m_pDeviceContext->UpdateSubresource(m_pCBuffer, 0, NULL, &m_ConstantBuffer, 0, 0);       // update constant buffer
 }
 
 void FRenderD3D11::TestGPUCalcValue(void)
 {
-	FMatrix mat = camera.GetProjectionMatrix();
+	FMatrix mat = camera.GetViewProjectionMatrix();
 
 	for (auto index : triCorn.indices)
 	{

@@ -15,11 +15,11 @@ public:
 public:
 	virtual void XAxisHandle(long Argument)
 	{
-		m_Rotator.V[0] -= Argument * m_fRotateSensivity;
+		m_Rotator.V[1] -= Argument * m_fRotateSensivity;
 	}
 	virtual void YAxisHandle(long Argument)
 	{
-		m_Rotator.V[1] -= Argument * m_fRotateSensivity;
+		m_Rotator.V[0] -= Argument * m_fRotateSensivity;
 	}
 
 	virtual void LButtonUpHandle(long Argument) {}

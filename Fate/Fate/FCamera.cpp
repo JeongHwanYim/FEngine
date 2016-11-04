@@ -34,7 +34,7 @@ FCamera::~FCamera()
 	m_pListenerList.clear();
 }
 
-FMatrix FCamera::GetProjectionMatrix()
+FMatrix FCamera::GetViewProjectionMatrix()
 {
 	FMatrix mat;
 

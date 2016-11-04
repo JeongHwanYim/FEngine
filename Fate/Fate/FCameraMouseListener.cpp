@@ -20,6 +20,6 @@ void FCameraMouseListener::Commit(FObject* pObj)
 	FVector4 vCommitedLookVec = pCamera->m_LocVecMatrix.multiply(vLookVec);
 	FVector4 vCommmitedUpVec = pCamera->m_LocVecMatrix.multiply(vUpVec);
 
+	//√ ±‚»≠
 	m_Rotator = FRotator();
-
 }
