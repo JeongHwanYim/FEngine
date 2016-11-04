@@ -3,7 +3,7 @@
 #include "FMouseListener.h"
 #include "Windows.h"
 #include <cmath>
-#include <xnamath.h>
+#include "FMath.h"
 
 class FSphereCameraMouseListener : public FMouseListener
 {
@@ -32,9 +32,15 @@ public:
 
 	void Convert(float& x, float &y, float& z)
 	{
+		/*
 		x = m_fRadius * std::sinf(m_fPI) * std::cosf(m_fTheta);
-		y = m_fRadius * std::sinf(m_fPI) * std::sinf(m_fPI);
+		y = m_fRadius * std::sinf(m_fPI) * std::sinf(m_fTheta);
 		z = m_fRadius * std::cosf(m_fPI);
+		*/
+
+		x = std::sinf(m_fPI * acos(-1) / 180.f) * std::cosf(m_fTheta * acos(-1) / 180.f);
+		y = std::sinf(m_fPI * acos(-1) / 180.f) * std::sinf(m_fTheta * acos(-1) / 180.f);
+		z = std::cosf(m_fPI * acos(-1) / 180.f);
 	}
 
 	virtual void LButtonUpHandle(long Argument) {}
@@ -44,6 +50,10 @@ public:
 	virtual void RButtonDownHandle(long Argument) {}
 
 	virtual void WheelClickHandle(long Argument) {}
+
+	virtual void Postprocess();
+
+	virtual void Commit(FObject* pObj);
 private:
 	float m_fRadius;
 	float m_fTheta;

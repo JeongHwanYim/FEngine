@@ -197,7 +197,7 @@ struct FMatrix
 			}
 		}
 	}
-	
+
 	FMatrix& operator *=(const FMatrix& other)
 	{
 		return *this * other;
@@ -234,10 +234,12 @@ struct FMatrix
 
 	FMatrix& SetTranslation(const FVector& translation)
 	{
-		for (int i = 0; i < translation.NUM_ELEMENT; ++i)
-		{
-			this->M[NUM_ELEMENT-1][i] += translation.V[i];
-		}
+		FMatrix mat;
+		mat.M[3][0] = -translation.V[0];
+		mat.M[3][1] = -translation.V[1];
+		mat.M[3][2] = -translation.V[2];
+
+		*this *= mat;
 
 		return *this;
 	}
@@ -246,14 +248,14 @@ struct FMatrix
 	{
 		FMatrix RotMatrix;
 
-		float SinX = ::std::sinf(rotation.V[0]);
-		float CosX = ::std::cosf(rotation.V[0]);
+		float SinX = ::std::sinf(rotation.V[0] * acos(-1) / 180);
+		float CosX = ::std::cosf(rotation.V[0] * acos(-1) / 180);
 
-		float SinY = ::std::sinf(rotation.V[1]);
-		float CosY = ::std::cosf(rotation.V[1]);
+		float SinY = ::std::sinf(rotation.V[1] * acos(-1) / 180);
+		float CosY = ::std::cosf(rotation.V[1] * acos(-1) / 180);
 
-		float SinZ = ::std::sinf(rotation.V[2]);
-		float CosZ = ::std::cosf(rotation.V[2]);
+		float SinZ = ::std::sinf(rotation.V[2] * acos(-1) / 180);
+		float CosZ = ::std::cosf(rotation.V[2] * acos(-1) / 180);
 
 		RotMatrix.M[0][0] = CosY * CosZ;
 		RotMatrix.M[0][1] = SinZ;
@@ -269,4 +271,65 @@ struct FMatrix
 
 		return (*this)*RotMatrix;
 	}
+
+	FMatrix GetTranspose()
+	{
+		FMatrix mat;
+
+		for (int i = 0; i < NUM_ELEMENT; ++i)
+		{
+			for (int j = 0; j < NUM_ELEMENT; ++j)
+			{
+				mat.M[i][j] = this->M[j][i];
+			}
+		}
+
+		return mat;
+	}
+
+	inline FVector4 multiply(const FVector4& vec)
+	{
+		FVector4 res(4, 0.0f, 0.0f, 0.0f, 0.0f);
+		for (int i = 0; i < vec.NUM_ELEMENT; ++i)
+		{
+			for (int j = 0; j < vec.NUM_ELEMENT; ++j)
+			{
+				res.V[i] += vec.V[j] * this->M[j][i];
+			}
+		}
+
+		return res;
+	}
 };
+
+inline float DotProduct(const FVector4& A, const FVector4& B)
+{
+	float X = A.V[0] * B.V[0];
+	float Y = A.V[1] * B.V[1];
+	float Z = A.V[2] * B.V[2];
+
+	return X + Y + Z;
+}
+
+inline FVector4 CrossProduct(const FVector4& A, const FVector4& B)
+{
+	float X = A.V[1] * B.V[2] - A.V[2] * B.V[1];
+	float Y = A.V[0] * B.V[2] - A.V[2] * B.V[0];
+	float Z = A.V[0] * B.V[1] - A.V[1] * B.V[0];
+
+	return FVector4(4, X, Y, Z, 0.0f);
+}
+
+inline void Normalize(FVector4& Point)
+{
+	float x = Point.V[0];
+	float y = Point.V[1];
+	float z = Point.V[2];
+
+	float SquareDist = x*x + y*y + z*z;
+	float Dist = std::sqrt(SquareDist);
+
+	Point.V[0] = x / Dist;
+	Point.V[1] = y / Dist;
+	Point.V[2] = z / Dist;
+}

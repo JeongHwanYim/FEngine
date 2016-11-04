@@ -61,13 +61,13 @@ bool FRenderD3D11::Initialize(HWND hWindow)
 	InitPipeline();
 	InitGraphics();
 
-	TestGPUCalcValue();
-
 	return true;
 }
 
 void FRenderD3D11::RenderFrame()
 {
+	camera.CommitListener();
+
 	float colorRGBA[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
 	// clear the back buffer to a deep blue
 	m_pDeviceContext->ClearRenderTargetView(m_pBackbuffer, colorRGBA);
@@ -88,12 +88,25 @@ void FRenderD3D11::RenderFrame()
 	// select which primtive type we are using
 	m_pDeviceContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	D3D11_RASTERIZER_DESC desc;
+	ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
+	desc.CullMode = D3D11_CULL_BACK;
+	desc.FillMode = D3D11_FILL_WIREFRAME;
+	desc.FrontCounterClockwise = false;
+	desc.DepthClipEnable = true;
+
+	ID3D11RasterizerState* pRasterizerState = NULL;
+	m_pDevice->CreateRasterizerState(&desc, &pRasterizerState);
+
+	m_pDeviceContext->RSSetState(pRasterizerState);
+
 	// draw the vertex buffer to the back buffer
 	m_pDeviceContext->DrawIndexed(FTriCorn::INDEX_COUNT, 0, 0);
 
 	// switch the back buffer and the front buffer
 	m_pSwapchain->Present(0, 0);
 
+	TestGPUCalcValue();
 }
 
 void FRenderD3D11::Finalize()
@@ -250,32 +263,25 @@ void FRenderD3D11::TestGPUCalcValue(void)
 		FVector4 vec;
 		vec.transVector4(ver.pos);
 		
-		FVector4 res;
-		for (int i = 0; i < mat.NUM_ELEMENT; ++i)
-		{
-			for (int j = 0; j < vec.NUM_ELEMENT; ++j)
-			{
-				res.V[i] += vec.V[j] * mat.M[j][i];
-			}
-		}
-
-		float fDistance = res.V[2];
-
-		float fFOVRate = tanf(camera.m_fFOV / 2 * acos(-1) / 180);
-
-		res.V[0] /= fDistance;
-		res.V[0] *= fFOVRate;
-		res.V[0] = res.V[0] * 2 - 1.0f;
-
-		res.V[1] /= fDistance;
-		res.V[1] *= fFOVRate;
-		res.V[1] = res.V[1] * 2 - 1.0f;
-
-		res.V[2] = fDistance / camera.m_fFar;
-
+		FVector4 res = mat.multiply(vec);
+//		
+//		float fDistance = res.V[2];
+//
+//		float fFOVRate = tanf(camera.m_fFOV / 2 * acos(-1) / 180);
+//
+//		res.V[0] /= fDistance;
+//		res.V[0] *= fFOVRate;
+//		res.V[0] = res.V[0] * 2 - 1.0f;
+//
+//		res.V[1] /= fDistance;
+//		res.V[1] *= fFOVRate;
+//		res.V[1] = res.V[1] * 2 - 1.0f;
+//
+//		res.V[2] = fDistance / camera.m_fFar;
+//
 		TCHAR str[256];
 
-		swprintf_s(str, TEXT("indices[%d] = (%f, %f, %f, %f)\n"), index, res.V[0], res.V[1], res.V[2], res.V[3]);
+		swprintf_s(str, TEXT("indices[%d] = (%f, %f, %f, %f) color = {%f %f %f %f}\n"), index, res.V[0], res.V[1], res.V[2], res.V[3], ver.color.V[0], ver.color.V[1], ver.color.V[2], ver.color.V[3]);
 		OutputDebugString(str);
 	}
 }

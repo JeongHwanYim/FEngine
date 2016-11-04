@@ -255,12 +255,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FCamera.cpp" />
+    <ClCompile Include="FCameraKeyboardListener.cpp" />
+    <ClCompile Include="FCameraMouseListener.cpp" />
     <ClCompile Include="FDeviceInputKeyboard.cpp" />
     <ClCompile Include="FDirectInputContext.cpp" />
     <ClCompile Include="FDirectInputMouse.cpp" />
     <ClCompile Include="FEngineLoop.cpp" />
     <ClCompile Include="FInputManager.cpp" />
     <ClCompile Include="FRenderD3D11.cpp" />
+    <ClCompile Include="FSphereCameraMouseListener.cpp" />
     <ClCompile Include="FWindows.cpp" />
     <ClCompile Include="TestFArray.cpp" />
     <ClCompile Include="TestFString.cpp" />
@@ -269,6 +272,8 @@
     <ClInclude Include="FateEngineDefine.h" />
     <ClInclude Include="FateEngineGlobalVariable.h" />
     <ClInclude Include="FCamera.h" />
+    <ClInclude Include="FCameraKeyboardListener.h" />
+    <ClInclude Include="FCameraMouseListener.h" />
     <ClInclude Include="FDirectInputContext.h" />
     <ClInclude Include="FDirectInputKeyboard.h" />
     <ClInclude Include="FDirectInputMouse.h" />

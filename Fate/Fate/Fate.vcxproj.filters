@@ -111,6 +111,15 @@
     <ClCompile Include="FCamera.cpp">
       <Filter>CameraRotateTest</Filter>
     </ClCompile>
+    <ClCompile Include="FSphereCameraMouseListener.cpp">
+      <Filter>Device\InputDevice\Listener</Filter>
+    </ClCompile>
+    <ClCompile Include="FCameraMouseListener.cpp">
+      <Filter>Device\InputDevice\Listener</Filter>
+    </ClCompile>
+    <ClCompile Include="FCameraKeyboardListener.cpp">
+      <Filter>Device\InputDevice\Listener</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FateEngineDefine.h">
@@ -196,6 +205,12 @@
     </ClInclude>
     <ClInclude Include="FObject.h">
       <Filter>CameraRotateTest</Filter>
+    </ClInclude>
+    <ClInclude Include="FCameraMouseListener.h">
+      <Filter>Device\InputDevice\Listener</Filter>
+    </ClInclude>
+    <ClInclude Include="FCameraKeyboardListener.h">
+      <Filter>Device\InputDevice\Listener</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

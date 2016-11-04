@@ -4,6 +4,8 @@
 #include "FInputListener.h"
 #include <vector>
 
+class FObject;
+
 class FMouseListener : public IInputListener
 {
 public:
@@ -24,6 +26,8 @@ public:
 	virtual void RButtonDownHandle(long Argument) {}
 
 	virtual void WheelClickHandle(long Argument) {}
+
+	virtual void Commit(FObject* pObj) {};
 };
 
 inline void FMouseListener::Preprocess(unsigned int eType, long Argument)

@@ -1,8 +1,9 @@
 #pragma once
 
+#include <vector>
 #include "FObject.h"
 
-class FMouseListener;
+class IInputListener;
 
 class FCamera : public FObject
 {
@@ -13,12 +14,8 @@ public:
 
 	FMatrix GetInverseRotationMatrix()
 	{
-		FMatrix mat;
-
-		FRotator direction = -GetDirection();
-		mat.SetRotation(direction);
-
-		return mat;
+		FMatrix mat(GetRotation());
+		return mat.GetTranspose();
 	}
 
 	FMatrix GetInverseTranslationMatrix()
@@ -31,15 +28,11 @@ public:
 		return mat;
 	}
 
-	FMatrix GetProjectionMatrix()
-	{
-		FMatrix mat;
+	FMatrix GetProjectionMatrix();
+	FVector4 GetLookVector();
+	FVector4 GetUpVector();
 
-		mat *= GetInverseTranslationMatrix();
-		mat *= GetInverseRotationMatrix();
-		
-		return mat;
-	}
+	void CommitListener();
 
 	float m_fNear;
 	float m_fFar;
@@ -49,7 +42,7 @@ public:
 	FVector4 m_vLook;
 	FVector4 m_vUp;
 private:
-	FMouseListener* m_pSphereMouseListener;
+	std::vector<IInputListener *> m_pListenerList;
 };
 
 struct VS_CONSTANT_BUFFER
