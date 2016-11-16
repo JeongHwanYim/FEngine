@@ -29,10 +29,9 @@ public:
 	}
 
 	// View Projection Matrix 구하기, 현재는 View만...
-	FMatrix GetViewProjectionMatrix();
-	FVector4 GetLookVector();
-	FVector4 GetUpVector();
-
+	FMatrix GetViewMatrix();
+	FMatrix GetProjectionMatrix();
+	
 	void CommitListener();
 
 	float m_fNear;

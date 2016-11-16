@@ -51,6 +51,11 @@ struct FVector
 	{
 		return FVector(3, -this->V[0], -this->V[1], -this->V[2]);
 	}
+
+	FVector operator -(const FVector& other)
+	{
+		return FVector(3, this->V[0] - other.V[0], -this->V[1] - other.V[1], -this->V[2] - other.V[2]);
+	}
 };
 
 
@@ -207,6 +212,7 @@ struct FMatrix
 	{
 		FMatrix RHS(*this);
 
+		// TODO : 풀어서 연산하기?
 		for (int i = 0; i < NUM_ELEMENT; ++i)
 		{
 			for (int j = 0; j < NUM_ELEMENT; ++j)

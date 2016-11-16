@@ -29,7 +29,7 @@ private:
 	void UpdateIndexBuffer(void);
 	void UpdateConstantBuffer(void);
 
-	void TestGPUCalcValue(void);
+	void ProcessInCPU(void);
 private:
 	IDXGISwapChain *m_pSwapchain;             // the pointer to the swap chain interface
 	ID3D11Device *m_pDevice;                     // the pointer to our Direct3D device interface
@@ -45,6 +45,7 @@ private:
 	ID3D11Buffer *m_pCBuffer;				// 상수버퍼 ㅋ
 
 	FTriCorn triCorn;
+	FTriCorn renderedTriCorn;
 	FCamera camera;
 
 	VS_CONSTANT_BUFFER m_ConstantBuffer;
