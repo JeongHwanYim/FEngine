@@ -256,7 +256,8 @@ void FRenderD3D11::UpdateIndexBuffer(void)
 
 void FRenderD3D11::UpdateConstantBuffer(void)
 {
-	m_ConstantBuffer.WorldViewProjection = camera.GetViewMatrix();
+	m_ConstantBuffer.ViewMatrix = camera.GetViewMatrix();
+	m_ConstantBuffer.ProjectionMatrix = camera.GetProjectionMatrix();
 	m_ConstantBuffer.Fov = camera.m_fFOV;
 	m_ConstantBuffer.Far = camera.m_fFar;
 	m_ConstantBuffer.ScreenRatio = camera.m_fScreenRadio;
@@ -294,8 +295,8 @@ void FRenderD3D11::ProcessInCPU(void)
 	for (auto& vertex : triCorn.vertex)
 	{
 		FVertex& ver = vertex;
-		FVector4 vec;
-		vec.transVector4(ver.pos);
+		FVector4 vec = ver.pos;
+		
 //		vec.V[3] = vec.V[2];
 		
 		FVector4 res = mat.multiply(vec);
@@ -306,8 +307,10 @@ void FRenderD3D11::ProcessInCPU(void)
 		res.V[1] /= zVal;
 		res.V[2] /= zVal;
 		res.V[3] /= zVal;
+		
+//		FVector4 res = vec;
 
-		renderedTriCorn.vertex.push_back({ FVector(3, res.V[0], res.V[1], res.V[2]), ver.color });
+		renderedTriCorn.vertex.push_back({ res, ver.color });
 
 		TCHAR str[256];
 

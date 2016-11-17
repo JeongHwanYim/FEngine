@@ -6,7 +6,7 @@
 
 struct FVertex
 {
-	FVector pos;
+	FVector4 pos;
 	FVector4 color;
 };
 
@@ -26,16 +26,16 @@ struct FTriCorn : public FObject
 	{
 		
 		vertex.push_back(
-		{FVector(3, 100.f, 150.f, 100.f * 2), FVector4(4, 1.0f, 0.0f, 0.0f, 1.0f)}
+		{FVector4(4, 100.f, 150.f, 100.f * 2, 1.0f), FVector4(4, 1.0f, 0.0f, 0.0f, 1.0f)}
 		);
 		vertex.push_back(
-		{FVector(3, 145.f, 50.f, 100.f * 2), FVector4(4, 0.0f, 1.0f, 0.0f, 1.0f)
+		{FVector4(4, 145.f, 50.f, 100.f * 2, 1.0f), FVector4(4, 0.0f, 1.0f, 0.0f, 1.0f)
 		});
 		vertex.push_back(
-		{FVector(3, 55.f, 50.f, 100.f * 2), FVector4(4, 0.0f, 0.0f, 1.0f, 1.0f)}
+		{FVector4(4, 55.f, 50.f, 100.f * 2, 1.0f), FVector4(4, 0.0f, 0.0f, 1.0f, 1.0f)}
 		);
 		vertex.push_back(
-		{FVector(3, 100.f, 160.f, 160.f * 2), FVector4(4, 0.5f, 0.5f, 0.5f, 1.0f)}
+		{FVector4(4, 100.f, 160.f, 160.f * 2, 1.0f), FVector4(4, 0.5f, 0.5f, 0.5f, 1.0f)}
 		);
 		
 		//
