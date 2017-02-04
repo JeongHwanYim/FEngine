@@ -259,7 +259,7 @@ void FRenderD3D11::UpdateConstantBuffer(void)
 	m_ConstantBuffer.WorldViewProjection = camera.GetViewMatrix();
 	m_ConstantBuffer.Fov = camera.m_fFOV;
 	m_ConstantBuffer.Far = camera.m_fFar;
-	m_ConstantBuffer.ScreenRatio = camera.m_fScreenRadio;
+	m_ConstantBuffer.ScreenRatio = camera.m_fScreenRatio;
 
 	m_pDeviceContext->UpdateSubresource(m_pCBuffer, 0, NULL, &m_ConstantBuffer, 0, 0);       // update constant buffer
 }
@@ -273,9 +273,9 @@ void FRenderD3D11::ProcessInCPU(void)
 	FMatrix ViewMat = camera.GetViewMatrix();
 	FMatrix ProjMat = camera.GetProjectionMatrix();
 	FVector cameraPos = camera.GetLocation();
-	FVector cameraTarget = camera.GetLocation() - FVector(3, camera.m_vLook.V[0], camera.m_vLook.V[1], camera.m_vLook.V[2]);
+	FVector cameraTarget = camera.GetLocation() + FVector(3, camera.m_vLook.V[0], camera.m_vLook.V[1], camera.m_vLook.V[2]);
 	FVector4 cameraUp = camera.m_vUp;
-
+/*
 	D3DXMATRIX d3dViewMat;
 
 	D3DXVECTOR3 EyePos = D3DXVECTOR3(cameraPos.V[0], cameraPos.V[1], cameraPos.V[2]);
@@ -286,7 +286,7 @@ void FRenderD3D11::ProcessInCPU(void)
 
 	D3DXMATRIX d3dProjMat;
 	D3DXMatrixPerspectiveFovLH(&d3dProjMat, camera.m_fFOV * acos(-1) / 180, camera.m_fScreenRadio, camera.m_fNear, camera.m_fFar);
-
+*/
 	FMatrix mat = ViewMat * ProjMat;
 
 	renderedTriCorn.indices = triCorn.indices;
@@ -294,8 +294,7 @@ void FRenderD3D11::ProcessInCPU(void)
 	for (auto& vertex : triCorn.vertex)
 	{
 		FVertex& ver = vertex;
-		FVector4 vec;
-		vec.transVector4(ver.pos);
+		FVector4 vec = FVector4::transVector4(ver.pos);
 //		vec.V[3] = vec.V[2];
 		
 		FVector4 res = mat.multiply(vec);

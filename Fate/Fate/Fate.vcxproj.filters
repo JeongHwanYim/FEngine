@@ -212,6 +212,9 @@
     <ClInclude Include="FCameraKeyboardListener.h">
       <Filter>Device\InputDevice\Listener</Filter>
     </ClInclude>
+    <ClInclude Include="FSphereCamera.h">
+      <Filter>CameraRotateTest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Resource\Shader\shader.shader">

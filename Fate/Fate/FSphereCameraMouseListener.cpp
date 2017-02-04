@@ -40,11 +40,11 @@ void FSphereCameraMouseListener::Commit(FObject* pObj)
 	mat.M[2][1] = vLookVec.V[1];
 	mat.M[2][2] = vLookVec.V[2];
 	mat.M[2][3] = vLookVec.V[3];
-	
+	/*
 	pCamera->m_LocVecMatrix *= mat;
 	pCamera->m_vLook = vLookVec;
 	pCamera->m_vUp = vUpVec;
-
+	*/
 	m_fTheta = 0.0f;
 	m_fPI = 0.0f;
 }

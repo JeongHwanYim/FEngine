@@ -47,6 +47,22 @@ struct FVector
 		return *this;
 	}
 
+	FVector operator +()
+	{
+		return FVector(3, this->V[0], this->V[1], this->V[2]);
+	}
+
+	FVector operator +(const FVector& other)
+	{
+		return FVector(3, this->V[0] + other.V[0], this->V[1] + other.V[1], this->V[2] + other.V[2]);
+	}
+
+	FVector& operator +=(const FVector& other)
+	{
+		*this = *this + other;
+		return (*this);
+	}
+
 	FVector operator -()
 	{
 		return FVector(3, -this->V[0], -this->V[1], -this->V[2]);
@@ -54,7 +70,7 @@ struct FVector
 
 	FVector operator -(const FVector& other)
 	{
-		return FVector(3, this->V[0] - other.V[0], -this->V[1] - other.V[1], -this->V[2] - other.V[2]);
+		return FVector(3, this->V[0] - other.V[0], this->V[1] - other.V[1], this->V[2] - other.V[2]);
 	}
 };
 
@@ -112,15 +128,31 @@ struct FVector4
 		return *this;
 	}
 
-	FVector4& transVector4(const FVector& origin)
+	static FVector4 transVector4(const FVector& origin)
 	{
+		FVector4 vRes;
 		for (int i = 0; i < origin.NUM_ELEMENT; ++i)
 		{
-			this->V[i] = origin.V[i];
+			vRes.V[i] = origin.V[i];
 		}
-		this->V[origin.NUM_ELEMENT] = 1;
+		vRes.V[origin.NUM_ELEMENT] = 1;
 
-		return *this;
+		return vRes;
+	}
+
+	FVector4 operator +(const FVector4& other)
+	{
+		return FVector4(4, this->V[0] + other.V[0], this->V[1] + other.V[1], this->V[2] + other.V[2], this->V[3], other.V[3]);
+	}
+
+	FVector4 operator -()
+	{
+		return FVector4(4, -this->V[0], -this->V[1], -this->V[2], -this->V[3]);
+	}
+
+	float SumElem()
+	{
+		return V[0] + V[1] + V[2] +V[3];
 	}
 };
 
@@ -238,18 +270,6 @@ struct FMatrix
 		return *this;
 	}
 
-	FMatrix& SetTranslation(const FVector& translation)
-	{
-		FMatrix mat;
-		mat.M[3][0] = -translation.V[0];
-		mat.M[3][1] = -translation.V[1];
-		mat.M[3][2] = -translation.V[2];
-
-		*this *= mat;
-
-		return *this;
-	}
-
 	FMatrix& SetRotation(const FRotator& rotation)
 	{
 		FMatrix RotMatrix;
@@ -306,9 +326,26 @@ struct FMatrix
 
 		return res;
 	}
+
+	void Set(int nPos, const FVector4& rhs)
+	{
+		for (int i = 0; i < NUM_ELEMENT; ++i)
+		{
+			M[nPos][i] = rhs.V[i];
+		}
+	}
 };
 
-inline float DotProduct(const FVector4& A, const FVector4& B)
+inline FVector4 DotProduct(const FVector4& A, const FVector4& B)
+{
+	float X = A.V[0] * B.V[0];
+	float Y = A.V[1] * B.V[1];
+	float Z = A.V[2] * B.V[2];
+
+	return FVector4(4, X, Y, Z, 0.0f);
+}
+
+inline float DotProductScalar(const FVector4& A, const FVector4& B)
 {
 	float X = A.V[0] * B.V[0];
 	float Y = A.V[1] * B.V[1];
@@ -320,7 +357,7 @@ inline float DotProduct(const FVector4& A, const FVector4& B)
 inline FVector4 CrossProduct(const FVector4& A, const FVector4& B)
 {
 	float X = A.V[1] * B.V[2] - A.V[2] * B.V[1];
-	float Y = A.V[0] * B.V[2] - A.V[2] * B.V[0];
+	float Y = A.V[2] * B.V[0] - A.V[0] * B.V[2];
 	float Z = A.V[0] * B.V[1] - A.V[1] * B.V[0];
 
 	return FVector4(4, X, Y, Z, 0.0f);

@@ -11,7 +11,6 @@ public:
 	FObject* GetParent() const { return m_pParent; }
 	inline FMatrix LocalToWorld() const;
 
-	FVector GetScale() const { return m_scale; }
 	inline FVector GetLocation() const
 	{
 		FVector vec(3, m_LocVecMatrix.M[3][0], m_LocVecMatrix.M[3][1], m_LocVecMatrix.M[3][2]);
@@ -26,12 +25,31 @@ public:
 
 		return mat;
 	}
+
+	inline void SetRotation(const FRotator& Rotator) { m_LocVecMatrix.SetRotation(Rotator); }
+
+	inline void SetTranslation(FVector trans) { m_LocVecMatrix.Set(3, FVector4::transVector4(-trans)); }
 	inline FMatrix GetMatrix() const{ return m_LocVecMatrix; }
 
-public:
+	inline FMatrix GetInverseRotationMatrix()
+	{
+		FMatrix mat(GetRotation());
+		return mat.GetTranspose();
+	}
+
+	inline FMatrix GetInverseTranslationMatrix()
+	{
+		FMatrix mat;
+
+		FVector location = -GetLocation();
+		mat.Set(3, -location);
+
+		return mat;
+	}
+
+private:
 	FObject* m_pParent;
 
-	FVector m_scale;
 	FMatrix m_LocVecMatrix;
 };
 
@@ -39,7 +57,7 @@ FMatrix FObject::LocalToWorld() const
 {
 	FMatrix mat;
 
-	mat.SetScale(GetScale());
+//	mat.SetScale(GetScale());
 	mat *= GetMatrix(); 
 
 	FObject* pParent = GetParent();

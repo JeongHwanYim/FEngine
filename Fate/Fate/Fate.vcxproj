@@ -292,6 +292,7 @@
     <ClInclude Include="FObject.h" />
     <ClInclude Include="FRenderD3D11.h" />
     <ClInclude Include="FRenderDevice.h" />
+    <ClInclude Include="FSphereCamera.h" />
     <ClInclude Include="FSphereCameraMouseListener.h" />
     <ClInclude Include="FString.h" />
     <ClInclude Include="FTestHelper.h" />

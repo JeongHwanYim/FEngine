@@ -37,6 +37,18 @@ struct FTriCorn : public FObject
 		vertex.push_back(
 		{FVector(3, 100.f, 160.f, 160.f * 2), FVector4(4, 0.5f, 0.5f, 0.5f, 1.0f)}
 		);
+
+		FVector mid;
+		for (auto& v : vertex)
+		{
+			mid += v.pos;
+		}
+		
+		mid.V[0] /= vertex.size();
+		mid.V[1] /= vertex.size();
+		mid.V[2] /= vertex.size();
+
+		SetTranslation(mid);
 		
 		//
 		//vertex.push_back(

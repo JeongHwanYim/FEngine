@@ -15,7 +15,7 @@ public:
 private:
 	std::vector < std::pair<unsigned int, long> > queue;
 	FVector m_vTranslation;
-	float m_fSensivity = 0.0005f;
+	float m_fSensivity = 1.0f;
 
 public:
 	virtual void OnKeyHandle(unsigned int eType, long Argument);

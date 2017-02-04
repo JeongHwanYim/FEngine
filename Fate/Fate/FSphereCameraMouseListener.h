@@ -27,7 +27,7 @@ public:
 	virtual void ZAxisHandle(long Argument)
 	{
 		m_fRadius += Argument * m_fRadiusSensivity;
-		m_fRadius = m_fRadius <= 0.1f ? 0.1f : m_fRadius >= 20 ? 20 : m_fRadius;
+		m_fRadius = m_fRadius <= 0.1f ? 0.1f : m_fRadius >= 200 ? 200 : m_fRadius;
 	}
 
 	void Convert(float& x, float &y, float& z)
