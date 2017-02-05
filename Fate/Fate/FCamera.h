@@ -31,7 +31,8 @@ private:
 
 struct VS_CONSTANT_BUFFER
 {
-	FMatrix WorldViewProjection;
+	FMatrix ViewMatrix;
+	FMatrix ProjectionMatrix;
 	float Fov;
 	float Far;
 	float ScreenRatio;

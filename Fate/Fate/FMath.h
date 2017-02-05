@@ -145,6 +145,12 @@ struct FVector4
 		return FVector4(4, this->V[0] + other.V[0], this->V[1] + other.V[1], this->V[2] + other.V[2], this->V[3], other.V[3]);
 	}
 
+	FVector4& operator +=(const FVector4& other)
+	{
+		*this = *this + other;
+		return (*this);
+	}
+
 	FVector4 operator -()
 	{
 		return FVector4(4, -this->V[0], -this->V[1], -this->V[2], -this->V[3]);

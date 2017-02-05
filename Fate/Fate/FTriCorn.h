@@ -8,6 +8,9 @@ struct FVertex
 {
 	FVector pos;
 	FVector4 color;
+
+	FVertex(const FVector& _pos, const FVector4& _color)
+		: pos(_pos), color(_color) {}
 };
 
 struct FTriCorn : public FObject
@@ -38,33 +41,33 @@ struct FTriCorn : public FObject
 		{FVector(3, 100.f, 160.f, 160.f * 2), FVector4(4, 0.5f, 0.5f, 0.5f, 1.0f)}
 		);
 
-		FVector mid;
+		FVector4 mid;
 		for (auto& v : vertex)
 		{
-			mid += v.pos;
+			mid += FVector4::transVector4(v.pos);
 		}
 		
 		mid.V[0] /= vertex.size();
 		mid.V[1] /= vertex.size();
 		mid.V[2] /= vertex.size();
 
-		SetTranslation(mid);
+		SetTranslation(FVector(3, mid.V[0], mid.V[1], mid.V[2]));
 		
-		//
-		//vertex.push_back(
-		//{ FVector(3, 0.f, 0.5f, 0.f), FVector4(4, 1.0f, 0.0f, 0.0f, 1.0f) }
-		//);
-		//vertex.push_back(
-		//{ FVector(3, 0.45f, -0.5f, 0.f), FVector4(4, 0.0f, 1.0f, 0.0f, 1.0f)
-		//});
-		//vertex.push_back(
-		//{ FVector(3, -0.45f, -0.5f, 0.f), FVector4(4, 0.0f, 0.0f, 1.0f, 1.0f) }
-		//);
-		//
-		//vertex.push_back(
-		//{ FVector(3, 0.f, 0.6f, 0.6f), FVector4(4, 0.5f, 0.5f, 0.5f, 1.0f) }
-		//);
-		//
+/*		
+		vertex.push_back(
+		{ FVector(3, 0.f, 0.5f, 0.f), FVector4(4, 1.0f, 0.0f, 0.0f, 1.0f) }
+		);
+		vertex.push_back(
+		{ FVector(3, 0.45f, -0.5f, 0.f), FVector4(4, 0.0f, 1.0f, 0.0f, 1.0f)
+		});
+		vertex.push_back(
+		{ FVector(3, -0.45f, -0.5f, 0.f), FVector4(4, 0.0f, 0.0f, 1.0f, 1.0f) }
+		);
+		
+		vertex.push_back(
+		{ FVector(3, 0.f, 0.6f, 0.6f), FVector4(4, 0.5f, 0.5f, 0.5f, 1.0f) }
+		);
+	*/	
 	}
 
 	void InitIndexBuffer()

@@ -1,6 +1,7 @@
 cbuffer ConstantBuffer : register( b0 )
 {
-	matrix WorldViewProjection;	// 현재는 World->View로 변환하는 행렬만 적용되어있음
+	float4x4 ViewMatrix;
+	float4x4 ProjectionMatrix;	// 현재는 World->View로 변환하는 행렬만 적용되어있음
 	float Fov; // 카메라의 시야각
 	float Far; // 카메라의 원평면 거리
 	float ScreenRatio;	// 화면 종횡비
@@ -17,8 +18,12 @@ VOut VShader(float4 position : POSITION, float4 color : COLOR)
 {
     VOut output;
 	
-	// 당분간 모든 연산을 CPU에서 진행해보자.
-	output.position = position;
+	position.w = 1.0f;
+	output.position = mul(position, ViewMatrix);
+	output.position = mul(output.position, ProjectionMatrix);
+
+	output.position /= output.position.w;
+	
 	output.color = color;
 
     return output;

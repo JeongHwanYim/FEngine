@@ -66,7 +66,7 @@ bool FRenderD3D11::Initialize(HWND hWindow)
 void FRenderD3D11::RenderFrame()
 {
 	camera.CommitListener();
-	ProcessInCPU();
+//	ProcessInCPU();
 
 	float colorRGBA[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
 	// clear the back buffer to a deep blue
@@ -101,7 +101,7 @@ void FRenderD3D11::RenderFrame()
 	m_pDeviceContext->RSSetState(pRasterizerState);
 
 	// draw the vertex buffer to the back buffer
-	m_pDeviceContext->DrawIndexed(renderedTriCorn.indices.size(), 0, 0);
+	m_pDeviceContext->DrawIndexed(triCorn.indices.size(), 0, 0);
 
 	// switch the back buffer and the front buffer
 	m_pSwapchain->Present(0, 0);
@@ -171,8 +171,11 @@ void FRenderD3D11::SetVertexBuffer(void)
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
 	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
+	D3D11_SUBRESOURCE_DATA vertexSubresourceData;
+	vertexSubresourceData.pSysMem = triCorn.vertex.data();
+
 	HRESULT hr;
-	hr = m_pDevice->CreateBuffer(&vertexBufferDesc, NULL, &m_pVertexBuffer);       // create vertex buffer
+	hr = m_pDevice->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, &m_pVertexBuffer);       // create vertex buffer
 	m_pVertexBuffer->SetPrivateData(WKPDID_D3DDebugObjectName, strlen("VertexBuffer") + 1, "VertexBuffer");
 	if (FAILED(hr))
 	{
@@ -211,7 +214,7 @@ void FRenderD3D11::SetConstantBuffer(void)
 	D3D11_BUFFER_DESC cBufferDesc;
 	ZeroMemory(&cBufferDesc, sizeof(cBufferDesc));
 
-	// 정적 인덱스 버퍼의 description을 작성합니다.
+	// 정적 상수 버퍼의 description을 작성합니다.
 	cBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	cBufferDesc.ByteWidth = sizeof(VS_CONSTANT_BUFFER);
 	cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -230,38 +233,23 @@ void FRenderD3D11::SetConstantBuffer(void)
 
 void FRenderD3D11::UpdateVertexBuffer(void)
 {
-	D3D11_MAPPED_SUBRESOURCE mappedSubresource;
-	ZeroMemory(&mappedSubresource, sizeof(mappedSubresource));
-	m_pDeviceContext->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
-
-	memcpy(mappedSubresource.pData, renderedTriCorn.vertex.data(), mappedSubresource.RowPitch);
-
-	m_pDeviceContext->UpdateSubresource(m_pVertexBuffer, 0, NULL, &mappedSubresource, 0, 0);       // update vertex buffer
-	m_pDeviceContext->Unmap(m_pVertexBuffer, 0);
 }
 
 void FRenderD3D11::UpdateIndexBuffer(void)
 {
-	/*
-	D3D11_MAPPED_SUBRESOURCE mappedSubresource;
-	ZeroMemory(&mappedSubresource, sizeof(mappedSubresource));
-	m_pDeviceContext->Map(m_pIndexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
-
-	memcpy(mappedSubresource.pData, renderedTriCorn.indices.data(), renderedTriCorn.indices.size());
-
-	m_pDeviceContext->UpdateSubresource(m_pIndexBuffer, 0, NULL, &mappedSubresource, 0, 0);       // update index buffer
-	m_pDeviceContext->Unmap(m_pIndexBuffer, 0);
-	*/
 }
 
 void FRenderD3D11::UpdateConstantBuffer(void)
 {
-	m_ConstantBuffer.WorldViewProjection = camera.GetViewMatrix();
-	m_ConstantBuffer.Fov = camera.m_fFOV;
-	m_ConstantBuffer.Far = camera.m_fFar;
-	m_ConstantBuffer.ScreenRatio = camera.m_fScreenRatio;
+	VS_CONSTANT_BUFFER cBuffer;
+	ZeroMemory(&cBuffer, sizeof(VS_CONSTANT_BUFFER));
+	cBuffer.ViewMatrix = camera.GetViewMatrix();
+	cBuffer.ProjectionMatrix = camera.GetProjectionMatrix();
+	cBuffer.Fov = camera.m_fFOV;
+	cBuffer.Far = camera.m_fFar;
+	cBuffer.ScreenRatio = camera.m_fScreenRatio;
 
-	m_pDeviceContext->UpdateSubresource(m_pCBuffer, 0, NULL, &m_ConstantBuffer, 0, 0);       // update constant buffer
+	m_pDeviceContext->UpdateSubresource(m_pCBuffer, 0, NULL, &cBuffer, 0, 0); // update constant buffer
 }
 
 void FRenderD3D11::ProcessInCPU(void)
@@ -305,6 +293,8 @@ void FRenderD3D11::ProcessInCPU(void)
 		res.V[1] /= zVal;
 		res.V[2] /= zVal;
 		res.V[3] /= zVal;
+		
+//		FVector4 res = vec;
 
 		renderedTriCorn.vertex.push_back({ FVector(3, res.V[0], res.V[1], res.V[2]), ver.color });
 

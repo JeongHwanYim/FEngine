@@ -2,3 +2,14 @@
 *.log
 *.obj
 *.pdb
+Fate/x64/Release64/FateEngine.exe
+*.ilk
+Fate/x64/Release64/FateEngine.ipdb
+*.iobj
+Fate/x64/Debug64/FateEngine.exe
+*.idb
+*.db
+Fate/.vs/Fate/v14/.suo
+*.exe
+*.suo
+*.suo

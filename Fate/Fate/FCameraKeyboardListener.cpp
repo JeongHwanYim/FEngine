@@ -7,16 +7,26 @@ void FCameraKeyboardListener::OnKeyHandle(unsigned int eType, long Argument)
 	case FKEY_W:
 		if (Argument == 1)
 		{
-			m_vTranslation.V[0] += 5.0f * m_fSensivity;
+			m_vTranslation.V[1] += 5.0f * m_fSensivity;
 		}
 		else
 		{
-			m_vTranslation.V[0] -= 5.0f * m_fSensivity;
+			m_vTranslation.V[1] -= 5.0f * m_fSensivity;
 		}
 		break;
 	case FKEY_S:
 		if (Argument == 1)
 		{
+			m_vTranslation.V[1] -= 5.0f * m_fSensivity;
+		}
+		else
+		{
+			m_vTranslation.V[1] += 5.0f * m_fSensivity;
+		}
+		break;
+	case FKEY_A:
+		if (Argument == 1)
+		{
 			m_vTranslation.V[0] -= 5.0f * m_fSensivity;
 		}
 		else
@@ -24,24 +34,14 @@ void FCameraKeyboardListener::OnKeyHandle(unsigned int eType, long Argument)
 			m_vTranslation.V[0] += 5.0f * m_fSensivity;
 		}
 		break;
-	case FKEY_A:
-		if (Argument == 1)
-		{
-			m_vTranslation.V[1] += 5.0f * m_fSensivity;
-		}
-		else
-		{
-			m_vTranslation.V[1] -= 5.0f * m_fSensivity;
-		}
-		break;
 	case FKEY_D:
 		if (Argument == 1)
 		{
-			m_vTranslation.V[1] -= 5.0f * m_fSensivity;
+			m_vTranslation.V[0] += 5.0f * m_fSensivity;
 		}
 		else
 		{
-			m_vTranslation.V[1] += 5.0f * m_fSensivity;
+			m_vTranslation.V[0] -= 5.0f * m_fSensivity;
 		}
 		break;
 	}
@@ -49,5 +49,5 @@ void FCameraKeyboardListener::OnKeyHandle(unsigned int eType, long Argument)
 
 void FCameraKeyboardListener::Commit(FObject* pObj)
 {
-	pObj->m_LocVecMatrix.SetTranslation(m_vTranslation);
+	pObj->SetTranslation(m_vTranslation);
 }
